@@ -4,19 +4,15 @@ import PageSkeleton from "../skeleton/PageSkeleton";
 
 const Navbar = () => {
   const [showForm, setShowForm] = useState(false);
-  const [addTables,setAddTables] = useState(false)
+  const [tables, setTables] = useState([]);
 
   useEffect(() => {
-    if (showForm) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    document.body.style.overflow = showForm ? "hidden" : "auto";
   }, [showForm]);
+
+  const handleAddTables = () => {
+    setTables([...tables, {}]);
+  };
 
   return (
     <>
@@ -25,9 +21,13 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-6">
           <ul className="flex items-center space-x-6">
-            <li onClick={()=>setAddTables(true)} className="cursor-pointer text-xl font-semibold hover:text-blue-600 transition">
+            <li
+              onClick={handleAddTables}
+              className="cursor-pointer text-xl font-semibold hover:text-blue-600 transition"
+            >
               Add Tables
             </li>
+
             <li
               onClick={() => setShowForm(true)}
               className="cursor-pointer text-xl font-semibold hover:text-blue-600 transition"
@@ -42,13 +42,11 @@ const Navbar = () => {
         </div>
       </nav>
 
-      <PageSkeleton/>
-    {addTables && (
-      
-        <PageSkeleton/>
-      
-      )}
-      
+      {/* Render Multiple PageSkeletons */}
+      {tables.map((_, index) => (
+        <PageSkeleton key={index} number = {index+1} />
+      ))}
+
       {showForm && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
