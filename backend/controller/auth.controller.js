@@ -27,6 +27,7 @@ export const register = async(req,res)=>{
             fullname,
             email,
             password:hashPass
+          //role:role || "user" here if role is not provided while registering then it will be user by deafult
         })
 
         generateToken(newUser._id,res)
