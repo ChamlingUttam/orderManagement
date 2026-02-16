@@ -9,7 +9,7 @@ const PageSkeleton = ({number}) => {
         <div className=" border-2 w-full max-w-md px-4 py-4 flex justify-between items-center">
           <h1 className="text-red-500 font-bold">Table {number}</h1>
           <div className='flex space-x-2'>
-            <button onClick={handlePreview} className="bg-green-500 cursor-pointer px-4 py-2 w-24 text-md border-none rounded-xl text-white font-bold">PREVIEW</button>
+            <button  className="bg-green-500 cursor-pointer px-4 py-2 w-24 text-md border-none rounded-xl text-white font-bold">PREVIEW</button>
           <button onClick={()=>setShowItems(!showItems)} className="bg-red-500 cursor-pointer px-4 py-2 w-24 text-md border-none rounded-xl text-white font-bold">ORDER</button>
           </div>
         </div>

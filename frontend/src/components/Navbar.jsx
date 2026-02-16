@@ -8,84 +8,88 @@ const Navbar = () => {
 
   useEffect(() => {
     document.body.style.overflow = showForm ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [showForm]);
 
   const handleAddTables = () => {
-    setTables([...tables, {}]);
+    setTables((prev) => [...prev, prev.length + 1]);
   };
 
   return (
     <>
-      <nav className="w-full px-6 py-3 bg-white shadow flex justify-between items-center">
+      <nav className="fixed top-0 w-full px-6 py-4 bg-white shadow flex justify-between items-center z-40">
         <h1 className="text-2xl font-bold">Admin</h1>
 
         <div className="flex items-center space-x-6">
           <ul className="flex items-center space-x-6">
             <li
               onClick={handleAddTables}
-              className="cursor-pointer text-xl font-semibold hover:text-blue-600 transition"
+              className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
             >
               Add Tables
             </li>
 
             <li
               onClick={() => setShowForm(true)}
-              className="cursor-pointer text-xl font-semibold hover:text-blue-600 transition"
+              className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
             >
               Add Items
             </li>
           </ul>
 
-          <button className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition cursor-pointer">
+          <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
             Logout
           </button>
         </div>
       </nav>
 
-      {/* Render Multiple PageSkeletons */}
-      {tables.map((_, index) => (
-        <PageSkeleton key={index} number = {index+1} />
-      ))}
+      <div className="pt-24 px-6 space-y-6">
+        {tables.map((number) => (
+          <PageSkeleton key={number} number={number} />
+        ))}
 
-      {showForm && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
-          onClick={() => setShowForm(false)}
-        >
+        {showForm && (
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white p-6 rounded-2xl shadow-2xl w-96 relative"
+            className="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
+            onClick={() => setShowForm(false)}
           >
-            <button
-              onClick={() => setShowForm(false)}
-              className="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition"
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white p-6 rounded-2xl shadow-2xl w-96 relative"
             >
-              <X size={18} />
-            </button>
-
-            <h2 className="text-lg font-semibold mb-4">Add Item</h2>
-
-            <form className="space-y-3">
-              <input
-                type="text"
-                placeholder="Enter name"
-                className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="number"
-                placeholder="Enter price"
-                className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
               <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                onClick={() => setShowForm(false)}
+                className="absolute top-3 right-3 text-gray-500 hover:text-red-500 transition"
               >
-                Add
+                <X size={18} />
               </button>
-            </form>
+
+              <h2 className="text-lg font-semibold mb-4">Add Item</h2>
+
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Enter name"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  type="number"
+                  placeholder="Enter price"
+                  className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+                >
+                  Add
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };
