@@ -40,7 +40,7 @@ const Register = () => {
       return false
     }
 
-    if(formData.password<8){
+    if(formData.password.length<8){
       toast.error("password character must be greater than 8")
       return false
     }

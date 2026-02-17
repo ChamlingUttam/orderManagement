@@ -12,7 +12,7 @@ const App = () => {
       <Toaster position='top-center'/>
 
       {/* <Page/> */}
-      <Register/>
+      {/* <Register/> */}
       {/* <Login/> */}
       {/* <Navbar/> */}
     </div>
