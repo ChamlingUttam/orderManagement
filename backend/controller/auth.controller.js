@@ -27,7 +27,7 @@ export const register = async(req,res)=>{
             fullname,
             email,
             password:hashPass
-          //role:role || "user" here if role is not provided while registering then it will be user by deafult
+          //role:role || "user" here if role is not provided while registering then it will be user by default
         })
 
         generateToken(newUser._id,res)
@@ -77,6 +77,37 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Something went wrong with login" })
   }
 }
+
+// export const login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body
+
+//     console.log("LOGIN INPUT:", email, password)
+
+//     const user = await User.findOne({ email })
+//     console.log("USER FROM DB:", user)
+
+//     const isPasswordCorrect = await bcrypt.compare(password, user.password)
+//     console.log("PASSWORD MATCH:", isPasswordCorrect)
+
+//     if (!isPasswordCorrect) {
+//       return res.status(401).json({ message: "Invalid credentials" })
+//     }
+
+//     generateToken(user._id, res)
+
+//     res.status(200).json({
+//       _id: user._id,
+//       fullname: user.fullname,
+//       email: user.email,
+//       role: user.role
+//     })
+
+//   } catch (error) {
+//     console.error("LOGIN ERROR:", error)
+//     res.status(500).json({ message: error.message })
+//   }
+// }
 
 export const logout = (req,res)=>{
 
