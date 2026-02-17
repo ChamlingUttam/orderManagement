@@ -1,11 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import PageSkeleton from "../skeleton/PageSkeleton";
+import { authStore } from "../stores/auth.store";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [showForm, setShowForm] = useState(false);
   const [tables, setTables] = useState([]);
 
+  const{logout,authUser} = authStore()
+
+  const navigate = useNavigate()
+
+  const handleLogout = ()=>{
+    logout()
+    navigate("/login")
+  }
+
+  const handleAddItem =  ()=>{
+    if(authUser.role !=="admin"){
+      toast.error("only admin can access")
+      return
+    }
+    setShowForm(true)
+  }
+
+ 
   useEffect(() => {
     document.body.style.overflow = showForm ? "hidden" : "auto";
     return () => {
@@ -14,13 +35,17 @@ const Navbar = () => {
   }, [showForm]);
 
   const handleAddTables = () => {
+    if(authUser.role !=="admin"){
+      toast.error("only admin can access")
+      return
+    }
     setTables((prev) => [...prev, prev.length + 1]);
   };
 
   return (
     <>
       <nav className="fixed top-0 w-full px-6 py-4 bg-white shadow flex justify-between items-center z-40">
-        <h1 className="text-2xl font-bold">Admin</h1>
+        <h1 className="text-2xl font-bold">{authUser.role ==="admin" ? "Admin" : "User"}</h1>
 
         <div className="flex items-center space-x-6">
           <ul className="flex items-center space-x-6">
@@ -32,14 +57,14 @@ const Navbar = () => {
             </li>
 
             <li
-              onClick={() => setShowForm(true)}
+              onClick={handleAddItem}
               className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
             >
               Add Items
             </li>
           </ul>
 
-          <button className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
             Logout
           </button>
         </div>
@@ -50,7 +75,8 @@ const Navbar = () => {
           <PageSkeleton key={number} number={number} />
         ))}
 
-        {showForm && (
+        
+        {showForm && authUser.role =="admin" && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black/40 z-50"
             onClick={() => setShowForm(false)}
