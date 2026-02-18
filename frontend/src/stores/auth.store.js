@@ -42,7 +42,7 @@ export const authStore = create(
                 }
             },
             logout:async()=>{
-                set({isLogout:false})
+                set({isLogout:true})
                 try {
                      await api.post("/auth/logout")
                     set({authUser:null})
