@@ -1,36 +1,25 @@
 import Table from "../models/table.model.js";
 
+export const addTables = async (req, res) => {
+  try {
+    // Get highest table number
+    const lastTable = await Table.findOne().sort({ number: -1 });
 
-export const addTables = async(req,res)=>{
+    const nextNumber = lastTable ? lastTable.number + 1 : 1;
 
-    try {
+    const newTable = await Table.create({ number: nextNumber });
 
-        const{number} = req.body
+    res.status(201).json(newTable);
+  } catch (error) {
+    res.status(500).json({ message: "Cannot create table" });
+  }
+};
 
-        const tableExist = await Table.findOne({number})
-        if(tableExist){
-            return res.status(409).json({message:"table already exist"})
-        }
-
-        const newTable = await Table.create({number})
-        res.status(201).json(newTable)
-        
-    } catch (error) {
-        res.status(500).json({message:"cant create table"})
-    }
-
-}
-
-export const getTables = async()=>{
-
-    try {
-
-        const getTable = await Table.find().sort({number:1})
-        res.status(200).json(getTable)
-        
-    } catch (error) {
-        res.status(500).json({message:"cant get the table"})
-    }
-
-}
-
+export const getTables = async (req, res) => {
+  try {
+    const tables = await Table.find().sort({ number: 1 });
+    res.status(200).json(tables);
+  } catch (error) {
+    res.status(500).json({ message: "Cannot fetch tables" });
+  }
+};
