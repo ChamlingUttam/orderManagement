@@ -6,7 +6,7 @@ import { isAdmin } from '../middleware/isAdmin.js'
 const crudRouter = express.Router()
 
 crudRouter.post("/create",protectedRoute,create) 
-crudRouter.get('/get',protectedRoute,isAdmin,getAll)
+crudRouter.get('/get',getAll)
 crudRouter.put('/edit/:id',protectedRoute,isAdmin,updateMenu)
 crudRouter.delete("/delete/:id",protectedRoute,isAdmin,deleteInfo
     

@@ -131,93 +131,193 @@
 
 
 
+// import React, { useEffect, useState } from "react";
+// import { X } from "lucide-react";
+// import toast from "react-hot-toast";
+// import { authStore } from "../stores/auth.store";
+// import { tableStore } from "../stores/table.store";
+// import { useNavigate } from "react-router-dom";
+// import AddItem from "../Layouts/AddItem";
 
-import React, { useEffect, useState } from "react";
-import PageSkeleton from "../skeleton/PageSkeleton";
-import { authStore } from "../stores/auth.store";
-import { tableStore } from "../stores/table.store";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import AddItem from "../Layouts/AddItem";
-import GetAllItem from "../Layouts/GetAllItem";
+// const Navbar = () => {
+//   const [showForm, setShowForm] = useState(false);
+//   const { logout, authUser } = authStore();
+//   const navigate = useNavigate();
+
+//   const { createTable, isCreatingTable } = tableStore();
+
+//   const handleLogout = () => {
+//     logout();
+//     navigate("/login");
+//   };
+
+//   const handleAddTables = async () => {
+//     if (authUser?.role !== "admin") {  // ✅ optional chaining
+//       toast.error("Only admin can access");
+//       return;
+//     }
+//     await createTable();
+//   };
+
+//   const handleAddItem = () => {
+//     if (authUser?.role !== "admin") {  // ✅ optional chaining
+//       toast.error("Only admin can access");
+//       return;
+//     }
+//     setShowForm(true);
+//   };
+
+//   useEffect(() => {
+//     document.body.style.overflow = showForm ? "hidden" : "auto";
+//     return () => {
+//       document.body.style.overflow = "auto";
+//     };
+//   }, [showForm]);
+
+//   return (
+//     <>
+//       <nav className="fixed top-0 w-full px-6 py-4 bg-white shadow flex justify-between items-center z-40">
+//         <h1 className="text-2xl font-bold">
+//           {authUser?.role === "admin" ? "Admin" : "User"}  {/* ✅ optional chaining */}
+//         </h1>
+
+//         <div className="flex items-center space-x-6">
+//           <ul className="flex items-center space-x-6">
+//             <li
+//               onClick={() => navigate("/viewItems")}
+//               className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
+//             >
+//               All Items
+//             </li>
+
+//             <li
+//               onClick={handleAddTables}
+//               className={`cursor-pointer text-lg font-semibold hover:text-blue-600 transition ${
+//                 isCreatingTable ? "opacity-50 pointer-events-none" : ""
+//               }`}
+//             >
+//               Add Tables
+//             </li>
+
+//             <li
+//               onClick={handleAddItem}
+//               className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
+//             >
+//               Add Items
+//             </li>
+//           </ul>
+
+//           <button
+//             onClick={handleLogout}
+//             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+//           >
+//             Logout
+//           </button>
+//         </div>
+//       </nav>
+
+//       {/* Add Item Modal */}
+//       <AddItem showForm={showForm} setShowForm={setShowForm} />
+//     </>
+//   );
+// };
+
+// export default Navbar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { authStore } from "../stores/auth.store"
+import { tableStore } from "../stores/table.store"
+import { useNavigate } from "react-router-dom"
+import AddItem from "../Layouts/AddItem"
 
 const Navbar = () => {
-  const [showForm, setShowForm] = useState(false);
-  const { logout, authUser } = authStore();
-  const [showItem,setShowItem] = useState(false)
-  const navigate = useNavigate();
+  const [showForm, setShowForm] = useState(false)
+  const { logout, authUser } = authStore()
+  const navigate = useNavigate()
+  const { createTable, isCreatingTable } = tableStore()
 
-  const {
-    tables,
-    getTables,
-    createTable,
-    isCreatingTable,
-    isGettingTable,
-  } = tableStore();
-
-  useEffect(() => {
-    getTables();
-  }, []);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const handleLogout = async () => {
+    await logout()
+    navigate("/login")
+  }
 
   const handleAddTables = async () => {
-    if (authUser.role !== "admin") {
-      toast.error("Only admin can access");
-      return;
+    if (authUser?.role !== "admin") {
+      toast.error("Only admin can access")
+      return
     }
-
-    await createTable();
-  };
+    await createTable()
+  }
 
   const handleAddItem = () => {
-    if (authUser.role !== "admin") {
-      toast.error("Only admin can access");
-      return;
+    if (authUser?.role !== "admin") {
+      toast.error("Only admin can access")
+      return
     }
-
-    setShowForm(true);
-  };
+    setShowForm(true)
+  }
 
   useEffect(() => {
-    document.body.style.overflow = showForm ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [showForm]);
+    document.body.style.overflow = showForm ? "hidden" : "auto"
+    return () => { document.body.style.overflow = "auto" }
+  }, [showForm])
 
   return (
     <>
       <nav className="fixed top-0 w-full px-6 py-4 bg-white shadow flex justify-between items-center z-40">
         <h1 className="text-2xl font-bold">
-          {authUser.role === "admin" ? "Admin" : "User"}
+          {authUser?.role === "admin" ? "Admin" : "User"}
         </h1>
 
         <div className="flex items-center space-x-6">
           <ul className="flex items-center space-x-6">
             <li
-              onClick={()=>setShowItem(true)}
-              className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition ">
-              All Items
-            </li>
-            <li
-              onClick={handleAddTables}
-              className={`cursor-pointer text-lg font-semibold hover:text-blue-600 transition ${
-                isCreatingTable ? "opacity-50 pointer-events-none" : ""
-              }`}
-            >
-              Add Tables
-            </li>
-
-            <li
-              onClick={handleAddItem}
+              onClick={() => navigate("/viewItems")}
               className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
             >
-              Add Items
+              All Items
             </li>
+
+            {authUser?.role === "admin" && (
+              <>
+                <li
+                  onClick={handleAddTables}
+                  className={`cursor-pointer text-lg font-semibold hover:text-blue-600 transition ${
+                    isCreatingTable ? "opacity-50 pointer-events-none" : ""
+                  }`}
+                >
+                  {isCreatingTable ? "Adding..." : "Add Tables"}
+                </li>
+
+                <li
+                  onClick={handleAddItem}
+                  className="cursor-pointer text-lg font-semibold hover:text-blue-600 transition"
+                >
+                  Add Items
+                </li>
+              </>
+            )}
           </ul>
 
           <button
@@ -229,24 +329,9 @@ const Navbar = () => {
         </div>
       </nav>
 
-      <div className="pt-24 px-6 space-y-6">
-        {isGettingTable ? (
-          <p>Loading tables...</p>
-        ) : (
-          tables.map((table) => (
-            <PageSkeleton key={table._id} number={table.number} />
-          ))
-        )}
-      </div>
-
-      {/* Pass props here */}
       <AddItem showForm={showForm} setShowForm={setShowForm} />
-
-      {showItem && (
-        <GetAllItem/>
-      )}
     </>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
